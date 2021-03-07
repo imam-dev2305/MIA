@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import router from "@vue/cli-service/generator/router/template/src/router";
+
 
 Vue.use(Vuex);
 
@@ -16,6 +16,7 @@ export default new Vuex.Store({
     },
     USER_LOGOUT (state) {
       this.replaceState(Object.assign(state, {bearer: ''}))
+      localStorage.removeItem('bearer')
     }
   },
   actions: {

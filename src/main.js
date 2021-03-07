@@ -67,20 +67,19 @@ router.beforeEach((to, from, next) => {
     if (store.state.bearer === null) {
       next('/')
     } else {
-      // axios({
-      //   method: "GET",
-      //   url: 'isAuthenticated',
-      //   headers: {
-      //     Authorization: `Bearer `+ store.state.bearer
-      //   }
-      // }).then((response) => {
-      //   if (response.data.message === "Authenticated") {
-      //     next()
-      //   } else {
-      //     next();
-      //   }
-      // })
-      next()
+      axios({
+        method: "GET",
+        url: 'isAuthenticated',
+        headers: {
+          Authorization: `Bearer `+ store.state.bearer
+        }
+      }).then((response) => {
+        if (response.data.message === "Authenticated") {
+          next()
+        } else {
+          next();
+        }
+      })
     }
   } else {
     if (to.path === '/login') {

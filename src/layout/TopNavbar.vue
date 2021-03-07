@@ -55,7 +55,7 @@
             <a class="dropdown-item" href="#">Separated link</a>
           </base-dropdown>
           <li class="nav-item">
-            <a href="#" class="nav-link" @click="USER_LOGOUT">
+            <a href="#" class="nav-link" @click="logout">
               Log out
             </a>
           </li>
@@ -93,6 +93,10 @@
       },
       hideSidebar () {
         this.$sidebar.displaySidebar(false)
+      },
+      logout () {
+        this.$store.dispatch('USER_LOGOUT')
+        this.$router.go('/')
       },
       ...mapActions(['USER_LOGOUT'])
     }
