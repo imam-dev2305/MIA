@@ -1,6 +1,7 @@
 import DashboardLayout from '../layout/DashboardLayout.vue'
 import LandingLayout from '../layout/Landing'
 import LoginLayout from '../layout/Login'
+import RegisterLayout from '../layout/Register'
 // GeneralViews
 import NotFound from '../pages/NotFoundPage.vue'
 
@@ -15,11 +16,16 @@ import Notifications from 'src/pages/Notifications.vue'
 const routes = [
   {
     path: '/',
+    name: 'landing',
     component: LandingLayout,
   },
   {
     path: '/login',
     component: LoginLayout,
+  },
+  {
+    path: '/register',
+    component: RegisterLayout,
   },
   {
     path: '/main',
@@ -32,36 +38,6 @@ const routes = [
         component: Overview,
         meta: {requiresAuth: true},
       },
-      {
-        path: 'kategori-transaksi',
-        name: 'Kategori Transaksi',
-        component: JournalAccount,
-        meta: {requiresAuth: true},
-      },
-      {
-        path: 'transaksi',
-        name: 'Transaksi',
-        component: Transaction,
-        meta: {requiresAuth: true},
-      },
-      {
-        path: 'asset-liabilitas',
-        name: 'Asset Liabilitas',
-        component: Typography,
-        meta: {requiresAuth: true},
-      },
-      {
-        path: 'pemasukan',
-        name: 'Pemasukan',
-        component: Icons,
-        meta: {requiresAuth: true},
-      },
-      {
-        path: 'perencanaan-keuangan',
-        name: 'Perencanaan Keuangan',
-        component: Notifications,
-        meta: {requiresAuth: true},
-      }
     ]
   },
   { path: '*', component: NotFound }

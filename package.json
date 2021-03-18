@@ -20,7 +20,7 @@
     "core-js": "^2.5.7",
     "google-maps": "^3.2.1",
     "moment": "^2.29.1",
-    "mongoose": "^5.11.17",
+    "mongodb": "^3.6.4",
     "register-service-worker": "^1.5.2",
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.6.6",

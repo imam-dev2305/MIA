@@ -11,6 +11,8 @@
             id="tgl_transaksi"
             placeholder=""
             :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+            :min="minDate"
+            :max="maxDate"
             locale="id"
             v-model="transaction_date"
           >
@@ -27,7 +29,7 @@
         {{alert.message}}
       </b-alert>
       <div class="table-responsive fixed-table-body">
-        <table class="table table-striped table-bordered" width="100%">
+        <table class="table table-striped" width="100%">
           <thead class="thead-dark">
           <tr>
             <th>#</th>
@@ -44,7 +46,9 @@
             <td>{{index+1}}</td>
             <td>
               <select name="sub_journal_account_id" class="form-control" v-model="record.sub_journal_account_id">
-                <option v-for="(akun, index) in akuns" :key="index" :value="akun.sub_journal_account_id">{{akun.sub_journal_account_id}} - {{akun.sub_journal_account_name}}</option>
+                <optgroup v-for="(kategori, index) in tipe_akun" :key="index" :label="kategori.journal_account_name">
+                  <option v-for="(akun, index) in akuns" :key="index" :value="akun.sub_journal_account_id" v-if="akun.journal_account_id === kategori.journal_account_id">{{akun.sub_journal_account_id}} - {{akun.sub_journal_account_name}}</option>
+                </optgroup>
               </select>
             </td>
             <td><input type="text" name="ref" class="form-control" v-model="record.ref"></td>
@@ -52,8 +56,8 @@
             <td><input type="text" name="debet" class="form-control" v-model="record.debet"></td>
             <td><input type="text" name="kredit" class="form-control" v-model="record.kredit"></td>
             <td>
-              <a class="btn btn-danger" v-show="(index+1) !== 1" @click="removeRow(index)"><span class="fa fa-trash"></span></a>
-              <a class="btn btn-light" @click="addMoreRow(index + 1)"><span class="fa fa-plus"></span></a>
+              <a class="btn btn-sm btn-danger" title="delete" @click="removeRow(index)"><span class="fa fa-trash"></span></a>
+              <a class="btn btn-sm btn-light" title="add more row" @click="addMoreRow(index + 1)"><span class="fa fa-plus"></span></a>
             </td>
           </tr>
           </tbody>
@@ -69,6 +73,15 @@
   export default {
     name: "Transaction",
     data() {
+      const now = new Date();
+      const minDate = new Date(now)
+      minDate.setMonth(minDate.getMonth())
+      minDate.setDate(1)
+
+      const maxDate = new Date(now)
+      maxDate.setMonth(maxDate.getMonth())
+      maxDate.setDate(this.getTheEndofMonth(maxDate))
+
       return {
         records: [{
           'sub_journal_account_id': '',
@@ -84,12 +97,16 @@
         },
         transaction_date: this.moment(new Date).format('YYYY-MM-DD'),
         akuns: [],
+        tipe_akun: '',
+        minDate: minDate,
+        maxDate: maxDate
       }
     },
 
     mounted() {
       this.listKategori()
       this.getTransaction()
+      this.daftar_akun()
     },
 
     methods: {
@@ -104,7 +121,24 @@
       },
 
       removeRow(idx) {
-        this.records.splice(idx, 1)
+        if (idx === 0 && this.records.length === 1) {
+          this.records = [{
+            'sub_journal_account_id': '',
+            'ref': '',
+            'keterangan': '',
+            'debet': '',
+            'kredit': ''
+          }]
+        } else {
+          this.records.splice(idx, 1)
+        }
+      },
+
+      daftar_akun() {
+        axios.get('journal/list-account', {headers: {Authorization: `Bearer `+this.$store.state.bearer}})
+          .then((response) => {
+            this.tipe_akun = response.data
+          })
       },
 
       listKategori() {
@@ -115,7 +149,7 @@
               new_obj.push({
                 'sub_journal_account_id': response.data[val].sub_journal_account_id,
                 'sub_journal_account_name': response.data[val].sub_journal_account_name,
-                'journal_account_name': response.data[val].journal_account_name
+                'journal_account_id': response.data[val].journal_account_id
               })
             })
             this.akuns = new_obj
@@ -158,7 +192,13 @@
           variant: ''
         }, 3000)
         this.getTransaction()
+      },
+
+      getTheEndofMonth(date) {
+        var dd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        return dd.getDate();
       }
+
     },
 
     watch: {

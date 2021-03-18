@@ -41,34 +41,9 @@
       return {
         menus: [
           {
-            to: '/',
+            to: '/main/overview',
             icon: '',
             name: 'Dasbor'
-          },
-          {
-            to: '/main/kategori-transaksi',
-            icon: '',
-            name: 'Kategori Transaksi'
-          },
-          {
-            to: '/main/transaksi',
-            icon: '',
-            name: 'Transaksi'
-          },
-          {
-            to: '/main/asset-liabilitas',
-            icon: '',
-            name: 'Asset / Liabilitas'
-          },
-          {
-            to: '/main/pemasukan',
-            icon: '',
-            name: 'Pemasukan'
-          },
-          {
-            to: '/main/perencanaan-keuangan',
-            icon: '',
-            name: 'Perencanaan Keuangan'
           },
         ]
       }
